@@ -24,6 +24,7 @@ html,body{
   height: 100%;
   overflow: hidden;
   background-color: #ddd;
+  perspective: 90rem;
 }
 .controller{
   position: absolute;
@@ -32,4 +33,44 @@ html,body{
   z-index: 9999;
   text-align: center;
   width: 100%;
+}
+.img-figure{
+  width: 16rem;
+  height: 18rem;
+  margin:0;
+  padding:2rem;
+  box-sizing: border-box;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  top:0;
+  transform-style:preserve-3d;
+  cursor: pointer;
+  transition: transform .6s ease-in-out,left .6s ease-in-out,top .6s ease-in-out;
+  /*把图片的翻转X轴原点归0*/
+  transform-origin: 0 50% 0;
+}
+.is-inverse{
+  /*把翻转过后的图片沿X轴挪一个自身的宽度,就达到抖动的效果*/
+  transform:translate(16rem) rotateY(180deg);
+}
+figcaption{
+  text-align: center;
+}
+.img-title{
+  margin-top:1rem;
+  color:#a7a0a2;
+  font-size: 0.8rem;
+}
+.img-back{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding:2rem;
+  background-color: white;
+  box-sizing: border-box;
+  transform: rotateY(180deg);
 }
