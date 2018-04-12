@@ -20,11 +20,12 @@ function getRangeRandom(low,high){//从区间随机取值
 function getRotateRandom(){//获取一个随机的正负30度
   return (Math.random() >0.5 ? '' : '-' +Math.ceil(Math.random() * 30));
 }
+//图片组件
 class ImgFigure extends Component{
   render(){
     let styleObj={},
       Position=this.props.position,
-      imgFigureClassName="img-figure";
+      imgFigureClassName='img-figure';
       imgFigureClassName += Position.isInverse ? ' is-inverse' : '';
     if(!!Position.pos){
       styleObj=Position.pos;
@@ -72,6 +73,31 @@ class ImgFigure extends Component{
     )
   }
 }
+//控制器组件
+class ControllerUnit extends Component {
+  render(){
+    let controllerClassName='controller-unit',Position=this.props.position;
+    if(Position.isCenter){
+      controllerClassName+=' is-center';
+      if(Position.isInverse){
+        controllerClassName+=' is-inverse';
+      }
+    }
+    return (
+      <span className={controllerClassName} onClick={
+      (e)=>{
+       e.stopPropagation();
+        e.preventDefault();
+        if(Position.isCenter){
+          this.props.inverse(this.props.index);
+        }else{
+           this.props.centerImage(this.props.index);
+        }
+      }
+      }></span>
+    )
+  }
+}
 class AppComponent extends Component{
   Constant={
     centerPos:{
@@ -114,7 +140,6 @@ class AppComponent extends Component{
     this.setState({
       imagesArray:imagesArray
     });
-    console.log(this.state.imagesArray);
   }
   //居中图片的index
   rearRange(centerIndex){
@@ -131,7 +156,7 @@ class AppComponent extends Component{
 
       //上侧图片
       let imagesTopArray=[],
-      topImgNum=Math.ceil(Math.random() *2),//取一个或不取图片
+      topImgNum=Math.floor(Math.random() *2),//取一个或不取图片Math.floor()向下取整,Math.ceil()向上取整
       topImgSpliceIndex=0,//图片在数组中的位置
 
       //居中图片
@@ -176,13 +201,12 @@ class AppComponent extends Component{
           isCenter:false
         }
       }
-
       if(imagesTopArray && imagesTopArray[0]){
         imagesArray.splice(topImgSpliceIndex,0,imagesTopArray[0])
       }
-    imagesArray.splice(centerIndex,0,imagesMiddleArray[0]);
+      imagesArray.splice(centerIndex,0,imagesMiddleArray[0]);
 
-    this.setState({
+      this.setState({
       imagesArray:imagesArray
     })
   }
@@ -266,6 +290,13 @@ class AppComponent extends Component{
         index={index}
         data={value}
         ref={'imgFigure'+index}
+        position={this.state.imagesArray[index]}
+        inverse={this.inverse.bind(this)}
+        centerImage={this.centerImage.bind(this)}
+      />);
+      controllers.push(<ControllerUnit
+        key={index}
+        index={index}
         position={this.state.imagesArray[index]}
         inverse={this.inverse.bind(this)}
         centerImage={this.centerImage.bind(this)}
